@@ -1,0 +1,5 @@
+﻿Ajouter une migration : 
+Add-Migration DionysosDBV1.11 -OutPutDir Data/Migrations
+
+Mettre à jour la BDD : 
+Update-DataBase
