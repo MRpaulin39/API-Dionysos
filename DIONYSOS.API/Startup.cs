@@ -38,21 +38,6 @@ namespace DIONYSOS.API
                 options.UseSqlServer(connectionString);
             });
 
-            ////Intégration de SWAGGER pour la documentation de l'API
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1", new OpenApiInfo
-            //    {
-            //        Title = "DIONYSOS API",
-            //        Version = "v1",
-            //        Description = "API de l'application Dionysos",
-            //        Contact = new OpenApiContact
-            //        {
-            //            Name = "Dionysos",
-            //            Email = string.Empty
-            //        },
-            //    });
-            //});
             services.AddSwaggerDocument(config =>
             {
                 config.PostProcess = document =>
@@ -83,18 +68,6 @@ namespace DIONYSOS.API
                 app.UseHsts();
             }
 
-            //// Enable middleware to serve generated Swagger as a JSON endpoint.
-            //app.UseSwagger();
-
-            //// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            //// specifying the Swagger JSON endpoint.
-            //app.UseSwaggerUI3(c =>
-            //{
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "DIONYSOS API V1");
-
-            //    // To serve SwaggerUI at application's root page, set the RoutePrefix property to an empty string.
-            //    c.RoutePrefix = string.Empty;
-            //});
 
             app.UseOpenApi();
             app.UseSwaggerUi3(c =>
