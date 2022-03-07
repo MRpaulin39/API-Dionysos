@@ -14,8 +14,13 @@ using System.Net;
 namespace DIONYSOS.API.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "Administrator")]
     [Route("api/alcohols")]
     [Produces("application/json")]
+    [SwaggerResponse(HttpStatusCode.Unauthorized, typeof(EmptyResult), Description = "Veuillez vous authentifier à l'API")]
+    [SwaggerResponse(HttpStatusCode.Forbidden, typeof(EmptyResult), Description = "Vous n'avez pas les privillèges nécessaires")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public class AlcoholController : ControllerBase
     {
         //Ajout du contructeur puis injection du context pour la connexion à la BDD
@@ -143,7 +148,6 @@ namespace DIONYSOS.API.Controllers
 
         //Permet de rajouter un alcool avec l'ID d'un produit
         [HttpPost("products/{productId}")]
-        [Authorize]
         [SwaggerResponse(HttpStatusCode.Created, typeof(WriteAlcoholViewModels), Description = "La création de l'alcool a été effectué avec succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(WriteAlcoholViewModels), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Une ou plusieurs valeurs dépassent le nombre de caractère autorisé")]
@@ -190,7 +194,6 @@ namespace DIONYSOS.API.Controllers
         #region HTTP PUT
 
         [HttpPut("{alcoholId}/products/{productId}")]
-        [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(WriteAlcoholViewModels), Description = "La mise à jour de l'alcool a été effectué avec succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(WriteAlcoholViewModels), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Une ou plusieurs valeurs dépassent le nombre de caractère autorisé")]
@@ -240,7 +243,6 @@ namespace DIONYSOS.API.Controllers
         #region HTTP PATCH
         //HTTP PATCH : Modification partielle
         [HttpPatch("{alcoholId}/products/{productId}")]
-        [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(EmptyResult), Description = "La mise à jour partiel de l'alcool a été effectué avec succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "La modification dépasse le nombre de caractère autorisé")]
@@ -318,7 +320,6 @@ namespace DIONYSOS.API.Controllers
         #region HTTP DELETE
 
         [HttpDelete("{alcoholId}")]
-        [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(EmptyResult), Description = "La suppression de l'alcool a été effectué avec succès")]
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(EmptyResult), Description = "L'ID de l'alcool est inconnu de la base de données")]
         [SwaggerResponse(HttpStatusCode.Conflict, typeof(EmptyResult), Description = "Présence de clé étangère, impossible de supprimer l'alcool")]

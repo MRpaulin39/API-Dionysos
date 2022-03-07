@@ -14,9 +14,13 @@ using System.Net;
 namespace DIONYSOS.API.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     [Route("api/suppliers")]
     [Produces("application/json")]
+    [SwaggerResponse(HttpStatusCode.Unauthorized, typeof(EmptyResult), Description = "Veuillez vous authentifier à l'API")]
+    [SwaggerResponse(HttpStatusCode.Forbidden, typeof(EmptyResult), Description = "Vous n'avez pas les privillèges nécessaires")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public class SuppliersController : ControllerBase
     {
         //Ajout du contructeur puis injection du context pour la connexion à la BDD

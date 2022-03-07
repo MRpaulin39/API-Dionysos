@@ -4,6 +4,7 @@ using DIONYSOS.API.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DIONYSOS.API.Data.Migrations
 {
     [DbContext(typeof(DionysosContext))]
-    partial class DionysosContextModelSnapshot : ModelSnapshot
+    [Migration("20220307132209_DionysosDBV2.1.1")]
+    partial class DionysosDBV211
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

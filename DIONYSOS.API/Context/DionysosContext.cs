@@ -19,5 +19,12 @@ namespace DIONYSOS.API.Context
         public DbSet<OrderSupplier> OrderSupplier { get; set; }
         public DbSet<APIUser> APIUser { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<APIUser>()
+                .Property(v => v.Role)
+                .HasDefaultValue("AuthUser");
+        }
+
     }
 }

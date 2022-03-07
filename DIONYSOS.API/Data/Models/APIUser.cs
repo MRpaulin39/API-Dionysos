@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DIONYSOS.API.Data.Models
@@ -18,6 +19,9 @@ namespace DIONYSOS.API.Data.Models
         [MaxLength(60)]
         public string Password { get; set; } //Mot de passe
 
+        [Required]
+        [MaxLength(20)]
+        public string Role { get; set; } //Role de l'utilisateur
 
     }
 }

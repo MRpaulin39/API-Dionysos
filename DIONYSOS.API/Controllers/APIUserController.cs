@@ -1,15 +1,18 @@
 ﻿using DIONYSOS.API.Authentification;
 using DIONYSOS.API.Data.ModelsApplicatif;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using NSwag.Annotations;
 using System.Collections.Generic;
+using System.Net;
 using System.Security.Claims;
 
 namespace DIONYSOS.API.Controllers
 {
     [ApiController]
-    [Route("api/suppliers")]
+    [Route("api/apiuser")]
     public class APIUserController : ControllerBase
     {
         private readonly IJwtAuthenticationService _jwtAuthenticationService;
@@ -21,9 +24,12 @@ namespace DIONYSOS.API.Controllers
             _config = config;
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         [AllowAnonymous]
-        [Route("login")]
+        [SwaggerResponse(HttpStatusCode.OK, typeof(EmptyResult), Description = "L'authentification a réussit")]
+        [SwaggerResponse(HttpStatusCode.Unauthorized, typeof(EmptyResult), Description = "L'authentification a échoué")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult Login([FromBody] LoginModel model)
         {
             var user = _jwtAuthenticationService.Authenticate(model.Email);
@@ -32,6 +38,7 @@ namespace DIONYSOS.API.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, user.Role),
                 };
                 var token = _jwtAuthenticationService.GenerateToken(_config["Jwt:Key"], claims);
                 return Ok(token);

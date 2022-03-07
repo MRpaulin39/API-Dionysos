@@ -8,8 +8,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using NSwag;
 using System;
+using System.Linq;
 using System.Text;
 
 namespace DIONYSOS.API
@@ -46,7 +49,7 @@ namespace DIONYSOS.API
             {
                 config.PostProcess = document =>
                 {
-                    document.Info.Version = "v1";
+                    document.Info.Version = "v2";
                     document.Info.Title = "DIONYSOS API";
                     document.Info.Description = "API de l'application Dionysos";
                     document.Info.Contact = new NSwag.OpenApiContact
@@ -55,8 +58,19 @@ namespace DIONYSOS.API
                         Email = string.Empty,
                         Url = "http://dionysos.com"
                     };
+
                 };
-            });
+
+                config.AddSecurity("JWT Token", Enumerable.Empty<string>(),
+                    new NSwag.OpenApiSecurityScheme()
+                    {
+                        Type = OpenApiSecuritySchemeType.ApiKey,
+                        Name = "Authorization",
+                        In = OpenApiSecurityApiKeyLocation.Header,
+                        Description = "Copier votre clé API dans le champ ci-dessous : Bearer {token}"
+                    }
+                );
+            });            
 
             services.AddAuthentication(options =>
             {
@@ -64,15 +78,18 @@ namespace DIONYSOS.API
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
 
-            .AddJwtBearer(options => {
+            .AddJwtBearer(options =>
+            {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]))
+
                 };
             });
+
             services.AddTransient<IJwtAuthenticationService, JwtAuthenticationService>();
 
 
@@ -93,10 +110,12 @@ namespace DIONYSOS.API
 
 
             app.UseOpenApi();
+
             app.UseSwaggerUi3(c =>
             {
                 c.Path = string.Empty;
             });
+
 
             app.UseRouting();
 

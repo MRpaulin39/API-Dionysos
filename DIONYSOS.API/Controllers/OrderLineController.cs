@@ -14,9 +14,13 @@ using System.Net;
 namespace DIONYSOS.API.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     [Route("api/orderline")]
     [Produces("application/json")]
+    [SwaggerResponse(HttpStatusCode.Unauthorized, typeof(EmptyResult), Description = "Veuillez vous authentifier à l'API")]
+    [SwaggerResponse(HttpStatusCode.Forbidden, typeof(EmptyResult), Description = "Vous n'avez pas les privillèges nécessaires")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public class OrderLineController : ControllerBase
     {
 
@@ -167,6 +171,7 @@ namespace DIONYSOS.API.Controllers
         #region HTTP POST
         //Permet de rajouter une ligne de commande à l'entête de commande
         [HttpPost("product/{productId}/orderheader/{orderHeaderId}")]
+        [Authorize(Roles = "Administrator,AuthUser")]
         [SwaggerResponse(HttpStatusCode.Created, typeof(WriteOrderLineViewModels), Description = "La création de la ligne de commande a été un succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(WriteOrderSupplierViewModels), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Une ou plusieurs valeurs dépassent le nombre de caractère autorisé")]
@@ -216,6 +221,7 @@ namespace DIONYSOS.API.Controllers
 
         #region HTTP PUT
         [HttpPut("{orderLineId}/product/{productId}/orderheader/{orderheaderId}")]
+        [Authorize(Roles = "Administrator,AuthUser")]
         [SwaggerResponse(HttpStatusCode.OK, typeof(WriteOrderLineViewModels), Description = "La mise à jour de la ligne de commande a été un succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(WriteOrderLineViewModels), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Une ou plusieurs valeurs dépassent le nombre de caractère autorisé")]
@@ -267,6 +273,7 @@ namespace DIONYSOS.API.Controllers
         #region HTTP PATCH
 
         [HttpPatch("{orderLineId}/product/{productId}/orderheader/{orderheaderId}")]
+        [Authorize(Roles = "Administrator,AuthUser")]
         [SwaggerResponse(HttpStatusCode.OK, typeof(EmptyResult), Description = "La mise à jour partiel de la ligne de commande a été un succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "La modification dépasse le nombre de caractère autorisé")]

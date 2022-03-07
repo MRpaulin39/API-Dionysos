@@ -16,9 +16,13 @@ using System.Net;
 namespace DIONYSOS.API.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     [Route("api/customers")]
     [Produces("application/json")]
+    [SwaggerResponse(HttpStatusCode.Unauthorized, typeof(EmptyResult), Description = "Veuillez vous authentifier à l'API")]
+    [SwaggerResponse(HttpStatusCode.Forbidden, typeof(EmptyResult), Description = "Vous n'avez pas les privillèges nécessaires")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public class CustomerController : ControllerBase
     {
         //Ajout du contructeur puis injection du context pour la connexion à la BDD
@@ -76,6 +80,7 @@ namespace DIONYSOS.API.Controllers
 
         //Récupération d'un client en fonction de l'ID
         [HttpGet("{idCustomer}", Name = "GetCustomer")]
+        [Authorize(Roles = "Administrator,AuthUser")]
         [SwaggerResponse(HttpStatusCode.OK, typeof(ReadCustomerViewModels), Description = "La récupération de du client via son ID a été un succès")]
         [SwaggerResponse(HttpStatusCode.NoContent, typeof(EmptyResult), Description = "La table client est vide")]
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(EmptyResult), Description = "L'ID client renseigné est inconnu de la base de données")]
@@ -122,7 +127,7 @@ namespace DIONYSOS.API.Controllers
         
         //Récupération d'un client en fonction de l'ID
         [HttpGet("mail/{mailCustomer}")]
-        [SwaggerResponse(HttpStatusCode.OK, typeof(ReadCustomerViewModels), Description = "La récupération de du client via son email a été un succès")]
+        [SwaggerResponse(HttpStatusCode.OK, typeof(ReadCustomerViewModels), Description = "La récupération du client via son email a été un succès")]
         [SwaggerResponse(HttpStatusCode.NoContent, typeof(EmptyResult), Description = "La table client est vide")]
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(EmptyResult), Description = "L'email duz client renseigné est inconnu de la base de données")]
         [SwaggerResponse(HttpStatusCode.InternalServerError, typeof(EmptyResult), Description = "Erreur serveur interne")]
@@ -173,6 +178,7 @@ namespace DIONYSOS.API.Controllers
 
         //Permet de rajouter un client
         [HttpPost]
+        [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.Created, typeof(WriteCustomerViewModels), Description = "La création du client a été effectué avec succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(WriteOrderSupplierViewModels), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Une ou plusieurs valeurs dépassent le nombre de caractère autorisé")]
@@ -215,6 +221,7 @@ namespace DIONYSOS.API.Controllers
         #region HTTP PUT
 
         [HttpPut("{customerId}")]
+        [Authorize(Roles = "Administrator,AuthUser")]
         [SwaggerResponse(HttpStatusCode.OK, typeof(WriteCustomerViewModels), Description = "La mise à jour des informations clients réalisé avec succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(WriteCustomerViewModels), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Une ou plusieurs valeurs dépassent le nombre de caractère autorisé")]
@@ -259,6 +266,7 @@ namespace DIONYSOS.API.Controllers
 
         #region HTTP PATCH
         [HttpPatch("{customerId}")]
+        [Authorize(Roles = "Administrator,AuthUser")]
         [SwaggerResponse(HttpStatusCode.OK, typeof(EmptyResult), Description = "La mise à jour partiel du client a été effectué avec succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "La modification dépasse le nombre de caractère autorisé")]

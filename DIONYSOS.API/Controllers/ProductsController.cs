@@ -14,8 +14,13 @@ using System.Net;
 namespace DIONYSOS.API.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "Administrator")]
     [Route("api/products")]
     [Produces("application/json")]
+    [SwaggerResponse(HttpStatusCode.Unauthorized, typeof(EmptyResult), Description = "Veuillez vous authentifier à l'API")]
+    [SwaggerResponse(HttpStatusCode.Forbidden, typeof(EmptyResult), Description = "Vous n'avez pas les privillèges nécessaires")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public class ProductsController : ControllerBase
     {
         //Ajout du contructeur puis injection du context pour la connexion à la BDD
@@ -139,7 +144,6 @@ namespace DIONYSOS.API.Controllers
 
         //Permet de rajouter un produit avec l'id du fournisseur
         [HttpPost("suppliers/{supplierId}")]
-        [Authorize]
         [SwaggerResponse(HttpStatusCode.Created, typeof(WriteProductViewModels), Description = "La création du produit a été un succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(WriteProductViewModels), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Une ou plusieurs valeurs dépassent le nombre de caractère autorisé")]
@@ -197,7 +201,6 @@ namespace DIONYSOS.API.Controllers
         #region HTTP PUT
 
         [HttpPut("{productId}/suppliers/{supplierId}")]
-        [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(WriteProductViewModels), Description = "La mise à jour du produit a été un succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(WriteProductViewModels), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Une ou plusieurs valeurs dépassent le nombre de caractère autorisé")]
@@ -255,7 +258,6 @@ namespace DIONYSOS.API.Controllers
         #region HTTP PATCH
 
         [HttpPatch("{productId}/suppliers/{supplierId}")]
-        [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(EmptyResult), Description = "La mise à jour partiel du produit a été un succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "La modification dépasse le nombre de caractère autorisé")]
@@ -335,7 +337,6 @@ namespace DIONYSOS.API.Controllers
         }
 
         [HttpPatch("OrderAuto")]
-        [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(WriteProductViewModels), Description = "Le mode commande automatique a été activé/désactivé")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.NoContent, typeof(EmptyResult), Description = "La table produit est vide")]
@@ -391,7 +392,6 @@ namespace DIONYSOS.API.Controllers
         #region HTTP DELETE
 
         [HttpDelete("{productId}")]
-        [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(EmptyResult), Description = "La suppression du produit a été effectué avec succès")]
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(EmptyResult), Description = "L'ID du produit est inconnu de la base de données")]
         [SwaggerResponse(HttpStatusCode.Conflict, typeof(EmptyResult), Description = "Présence de clé étangère, impossible de supprimer le produit")]

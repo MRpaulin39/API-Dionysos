@@ -14,9 +14,13 @@ using System.Net;
 namespace DIONYSOS.API.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     [Route("api/orderheader")]
     [Produces("application/json")]
+    [SwaggerResponse(HttpStatusCode.Unauthorized, typeof(EmptyResult), Description = "Veuillez vous authentifier à l'API")]
+    [SwaggerResponse(HttpStatusCode.Forbidden, typeof(EmptyResult), Description = "Vous n'avez pas les privillèges nécessaires")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public class OrderHeaderController : ControllerBase
     {
 
@@ -119,6 +123,7 @@ namespace DIONYSOS.API.Controllers
 
         //Permet de rajouter une commande au client
         [HttpPost("customer/{customerId}")]
+        [Authorize(Roles = "Administrator,AuthUser")]
         [SwaggerResponse(HttpStatusCode.Created, typeof(WriteOrderHeaderViewModels), Description = "La création de l'entête de commande a été effectué avec succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(WriteOrderSupplierViewModels), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Une ou plusieurs valeurs dépassent le nombre de caractère autorisé")]
@@ -161,6 +166,7 @@ namespace DIONYSOS.API.Controllers
         #region HTTP PUT
 
         [HttpPut("{orderHeaderId}/customer/{customerId}")]
+        [Authorize(Roles = "Administrator,AuthUser")]
         [SwaggerResponse(HttpStatusCode.OK, typeof(WriteOrderHeaderViewModels), Description = "La mise à jour de l'entête de commande a été effectué avec succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(WriteOrderHeaderViewModels), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Une ou plusieurs valeurs dépassent le nombre de caractère autorisé")]
@@ -205,6 +211,7 @@ namespace DIONYSOS.API.Controllers
         #region HTTP PATCH
 
         [HttpPatch("{orderHeaderId}/customer/{customerId}")]
+        [Authorize(Roles = "Administrator,AuthUser")]
         [SwaggerResponse(HttpStatusCode.OK, typeof(EmptyResult), Description = "La mise à jour partiel de l'entête a été effectué avec succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "La modification dépasse le nombre de caractère autorisé")]
