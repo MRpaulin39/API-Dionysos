@@ -1,6 +1,7 @@
 ﻿using DIONYSOS.API.Context;
-using DIONYSOS.API.Models;
+using DIONYSOS.API.Data.Models;
 using DIONYSOS.API.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using System.Net;
 namespace DIONYSOS.API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/suppliers")]
     [Produces("application/json")]
     public class SuppliersController : ControllerBase

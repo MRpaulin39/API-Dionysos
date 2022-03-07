@@ -1,6 +1,7 @@
 ﻿using DIONYSOS.API.Context;
-using DIONYSOS.API.Models;
+using DIONYSOS.API.Data.Models;
 using DIONYSOS.API.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,7 @@ namespace DIONYSOS.API.Controllers
 
         //Récupération de tous les alcools
         [HttpGet]
+        [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(ReadAlcoholViewModels), Description = "La récupération de tous les alcools avec le produit associé a été un succès")]
         [SwaggerResponse(HttpStatusCode.NoContent, typeof(EmptyResult), Description = "La table alcool est vide")]
         [SwaggerResponse(HttpStatusCode.InternalServerError, typeof(EmptyResult), Description = "Erreur serveur interne")]
@@ -78,6 +80,7 @@ namespace DIONYSOS.API.Controllers
 
         //Récupération d'un alcool en fonction de l'ID de l'alcool
         [HttpGet("{alcoholId}", Name = "GetAlcohol")]
+        [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(ReadAlcoholViewModels), Description = "La récupération de l'alcool via l'id avec le produit associé réussi")]
         [SwaggerResponse(HttpStatusCode.NoContent, typeof(EmptyResult), Description = "La table alcool est vide")]
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(EmptyResult), Description = "L'ID de l'alcool est inconnu de la base de données")]
@@ -140,6 +143,7 @@ namespace DIONYSOS.API.Controllers
 
         //Permet de rajouter un alcool avec l'ID d'un produit
         [HttpPost("products/{productId}")]
+        [Authorize]
         [SwaggerResponse(HttpStatusCode.Created, typeof(WriteAlcoholViewModels), Description = "La création de l'alcool a été effectué avec succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(WriteAlcoholViewModels), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Une ou plusieurs valeurs dépassent le nombre de caractère autorisé")]
@@ -186,6 +190,7 @@ namespace DIONYSOS.API.Controllers
         #region HTTP PUT
 
         [HttpPut("{alcoholId}/products/{productId}")]
+        [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(WriteAlcoholViewModels), Description = "La mise à jour de l'alcool a été effectué avec succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(WriteAlcoholViewModels), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Une ou plusieurs valeurs dépassent le nombre de caractère autorisé")]
@@ -235,6 +240,7 @@ namespace DIONYSOS.API.Controllers
         #region HTTP PATCH
         //HTTP PATCH : Modification partielle
         [HttpPatch("{alcoholId}/products/{productId}")]
+        [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(EmptyResult), Description = "La mise à jour partiel de l'alcool a été effectué avec succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "La modification dépasse le nombre de caractère autorisé")]
@@ -312,6 +318,7 @@ namespace DIONYSOS.API.Controllers
         #region HTTP DELETE
 
         [HttpDelete("{alcoholId}")]
+        [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(EmptyResult), Description = "La suppression de l'alcool a été effectué avec succès")]
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(EmptyResult), Description = "L'ID de l'alcool est inconnu de la base de données")]
         [SwaggerResponse(HttpStatusCode.Conflict, typeof(EmptyResult), Description = "Présence de clé étangère, impossible de supprimer l'alcool")]

@@ -1,6 +1,7 @@
 ﻿using DIONYSOS.API.Context;
-using DIONYSOS.API.Models;
+using DIONYSOS.API.Data.Models;
 using DIONYSOS.API.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,7 @@ namespace DIONYSOS.API.Controllers
 
         //Récupération de tous les produits
         [HttpGet]
+        [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(ReadProductViewModels), Description = "La récupération de tous les produits avec le fournisseur associé a été un succès")]
         [SwaggerResponse(HttpStatusCode.NoContent, typeof(EmptyResult), Description = "La table produits est vide")]
         [SwaggerResponse(HttpStatusCode.InternalServerError, typeof(EmptyResult), Description = "Erreur serveur interne")]
@@ -75,6 +77,7 @@ namespace DIONYSOS.API.Controllers
 
         //Récupération d'un produit en fonction de l'ID
         [HttpGet("{productId}", Name = "GetProduct")]
+        [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(ReadProductViewModels), Description = "La récupération du produit avec le fournisseur associé a été un succès")]
         [SwaggerResponse(HttpStatusCode.NoContent, typeof(EmptyResult), Description = "La table produits est vide")]
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(EmptyResult), Description = "L'ID du produit renseigné n'est pas connu de la base de données")]
@@ -136,6 +139,7 @@ namespace DIONYSOS.API.Controllers
 
         //Permet de rajouter un produit avec l'id du fournisseur
         [HttpPost("suppliers/{supplierId}")]
+        [Authorize]
         [SwaggerResponse(HttpStatusCode.Created, typeof(WriteProductViewModels), Description = "La création du produit a été un succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(WriteProductViewModels), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Une ou plusieurs valeurs dépassent le nombre de caractère autorisé")]
@@ -193,6 +197,7 @@ namespace DIONYSOS.API.Controllers
         #region HTTP PUT
 
         [HttpPut("{productId}/suppliers/{supplierId}")]
+        [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(WriteProductViewModels), Description = "La mise à jour du produit a été un succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(WriteProductViewModels), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Une ou plusieurs valeurs dépassent le nombre de caractère autorisé")]
@@ -250,6 +255,7 @@ namespace DIONYSOS.API.Controllers
         #region HTTP PATCH
 
         [HttpPatch("{productId}/suppliers/{supplierId}")]
+        [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(EmptyResult), Description = "La mise à jour partiel du produit a été un succès")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "La modification dépasse le nombre de caractère autorisé")]
@@ -329,6 +335,7 @@ namespace DIONYSOS.API.Controllers
         }
 
         [HttpPatch("OrderAuto")]
+        [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(WriteProductViewModels), Description = "Le mode commande automatique a été activé/désactivé")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(EmptyResult), Description = "Le fichier Json est incorrect")]
         [SwaggerResponse(HttpStatusCode.NoContent, typeof(EmptyResult), Description = "La table produit est vide")]
@@ -384,6 +391,7 @@ namespace DIONYSOS.API.Controllers
         #region HTTP DELETE
 
         [HttpDelete("{productId}")]
+        [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(EmptyResult), Description = "La suppression du produit a été effectué avec succès")]
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(EmptyResult), Description = "L'ID du produit est inconnu de la base de données")]
         [SwaggerResponse(HttpStatusCode.Conflict, typeof(EmptyResult), Description = "Présence de clé étangère, impossible de supprimer le produit")]

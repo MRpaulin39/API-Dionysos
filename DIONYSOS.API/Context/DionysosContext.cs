@@ -1,4 +1,4 @@
-﻿using DIONYSOS.API.Models;
+﻿using DIONYSOS.API.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DIONYSOS.API.Context
@@ -17,6 +17,7 @@ namespace DIONYSOS.API.Context
         public DbSet<Product> Product { get; set; }
         public DbSet<Supplier> Supplier { get; set; }
         public DbSet<OrderSupplier> OrderSupplier { get; set; }
+        public DbSet<APIUser> APIUser { get; set; }
 
     }
 }

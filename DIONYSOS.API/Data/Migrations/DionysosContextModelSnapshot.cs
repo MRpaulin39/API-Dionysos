@@ -22,7 +22,7 @@ namespace DIONYSOS.API.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("DIONYSOS.API.Models.Alcohol", b =>
+            modelBuilder.Entity("DIONYSOS.API.Data.Models.Alcohol", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,7 +68,32 @@ namespace DIONYSOS.API.Data.Migrations
                     b.ToTable("Alcohol");
                 });
 
-            modelBuilder.Entity("DIONYSOS.API.Models.Customer", b =>
+            modelBuilder.Entity("DIONYSOS.API.Data.Models.APIUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Password")
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<string>("Username")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("APIUser");
+                });
+
+            modelBuilder.Entity("DIONYSOS.API.Data.Models.Customer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -122,7 +147,7 @@ namespace DIONYSOS.API.Data.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("DIONYSOS.API.Models.OrderHeader", b =>
+            modelBuilder.Entity("DIONYSOS.API.Data.Models.OrderHeader", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -146,7 +171,7 @@ namespace DIONYSOS.API.Data.Migrations
                     b.ToTable("OrderHeader");
                 });
 
-            modelBuilder.Entity("DIONYSOS.API.Models.OrderLine", b =>
+            modelBuilder.Entity("DIONYSOS.API.Data.Models.OrderLine", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -175,7 +200,7 @@ namespace DIONYSOS.API.Data.Migrations
                     b.ToTable("OrderLine");
                 });
 
-            modelBuilder.Entity("DIONYSOS.API.Models.OrderSupplier", b =>
+            modelBuilder.Entity("DIONYSOS.API.Data.Models.OrderSupplier", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -202,7 +227,7 @@ namespace DIONYSOS.API.Data.Migrations
                     b.ToTable("OrderSupplier");
                 });
 
-            modelBuilder.Entity("DIONYSOS.API.Models.Product", b =>
+            modelBuilder.Entity("DIONYSOS.API.Data.Models.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -261,7 +286,7 @@ namespace DIONYSOS.API.Data.Migrations
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("DIONYSOS.API.Models.Supplier", b =>
+            modelBuilder.Entity("DIONYSOS.API.Data.Models.Supplier", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -296,31 +321,31 @@ namespace DIONYSOS.API.Data.Migrations
                     b.ToTable("Supplier");
                 });
 
-            modelBuilder.Entity("DIONYSOS.API.Models.Alcohol", b =>
+            modelBuilder.Entity("DIONYSOS.API.Data.Models.Alcohol", b =>
                 {
-                    b.HasOne("DIONYSOS.API.Models.Product", "Product")
+                    b.HasOne("DIONYSOS.API.Data.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
 
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("DIONYSOS.API.Models.OrderHeader", b =>
+            modelBuilder.Entity("DIONYSOS.API.Data.Models.OrderHeader", b =>
                 {
-                    b.HasOne("DIONYSOS.API.Models.Customer", "Customer")
+                    b.HasOne("DIONYSOS.API.Data.Models.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId");
 
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("DIONYSOS.API.Models.OrderLine", b =>
+            modelBuilder.Entity("DIONYSOS.API.Data.Models.OrderLine", b =>
                 {
-                    b.HasOne("DIONYSOS.API.Models.OrderHeader", "OrderHeader")
+                    b.HasOne("DIONYSOS.API.Data.Models.OrderHeader", "OrderHeader")
                         .WithMany()
                         .HasForeignKey("OrderHeaderId");
 
-                    b.HasOne("DIONYSOS.API.Models.Product", "Product")
+                    b.HasOne("DIONYSOS.API.Data.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
 
@@ -329,18 +354,18 @@ namespace DIONYSOS.API.Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("DIONYSOS.API.Models.OrderSupplier", b =>
+            modelBuilder.Entity("DIONYSOS.API.Data.Models.OrderSupplier", b =>
                 {
-                    b.HasOne("DIONYSOS.API.Models.Product", "Product")
+                    b.HasOne("DIONYSOS.API.Data.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
 
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("DIONYSOS.API.Models.Product", b =>
+            modelBuilder.Entity("DIONYSOS.API.Data.Models.Product", b =>
                 {
-                    b.HasOne("DIONYSOS.API.Models.Supplier", "Supplier")
+                    b.HasOne("DIONYSOS.API.Data.Models.Supplier", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierId");
 

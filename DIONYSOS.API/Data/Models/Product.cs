@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DIONYSOS.API.Models
+namespace DIONYSOS.API.Data.Models
 {
     public class Product
     {
