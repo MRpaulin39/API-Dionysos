@@ -3,9 +3,6 @@ name: .NET
 on:
   push:
     branches: [ master ]
-  label:
-    types:
-      - PreProd
 
 jobs:
   build:
