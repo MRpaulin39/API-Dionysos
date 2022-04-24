@@ -5,7 +5,7 @@ on:
     branches: [ master ]
   label:
     types:
-      - Prod
+      - PreProd
 
 jobs:
   build:
